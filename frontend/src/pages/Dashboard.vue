@@ -6,9 +6,7 @@ import {
   LogOut,
   User,
   Shield,
-  CreditCard,
   Calendar,
-  Filter,
   Trash2,
 } from "lucide-vue-next";
 
@@ -18,7 +16,7 @@ const loading = ref(true);
 const statusFilter = ref("");
 
 const fetchLoans = async () => {
-  loading.ref = true;
+  loading.value = true;
   try {
     const url = statusFilter.value
       ? `/loans?status=${statusFilter.value}`

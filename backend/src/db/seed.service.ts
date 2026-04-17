@@ -24,18 +24,21 @@ export class SeedService implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     this.logger.log('Checking if seeding is needed...');
 
-    const userCount = await this.db.select({ count: users.id }).from(users);
-    const hasUsers = userCount.length > 0 && userCount[0].count > 0;
-
-    const loanCount = await this.db.select({ count: loans.id }).from(loans);
-    const hasLoans = loanCount.length > 0 && loanCount[0].count > 0;
-
-    if (hasUsers && hasLoans) {
-      this.logger.log('Database already seeded. Skipping.');
-      return;
-    }
-
     try {
+      // Small delay to ensure DB is fully ready/visible
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      const userCount = await this.db.select({ count: users.id }).from(users);
+      const hasUsers = userCount.length > 0 && userCount[0].count > 0;
+
+      const loanCount = await this.db.select({ count: loans.id }).from(loans);
+      const hasLoans = loanCount.length > 0 && loanCount[0].count > 0;
+
+      if (hasUsers && hasLoans) {
+        this.logger.log('Database already seeded. Skipping.');
+        return;
+      }
+
       if (!hasUsers) {
         this.logger.log('Seeding users...');
         await this.seedUsers();
@@ -48,7 +51,8 @@ export class SeedService implements OnApplicationBootstrap {
 
       this.logger.log('Seeding completed successfully.');
     } catch (error) {
-      this.logger.error('Seeding failed:', error);
+      this.logger.error('Seeding encountered an error. If "relation does not exist", the schema might not be fully synced yet.');
+      this.logger.error(error);
     }
   }
 

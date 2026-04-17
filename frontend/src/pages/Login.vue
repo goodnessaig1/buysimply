@@ -36,10 +36,11 @@ const onSubmit = handleSubmit(async (values) => {
   if (success) {
     router.push("/");
   } else if (authStore.error) {
-    if (authStore.error.toLowerCase().includes("account")) {
-      setFieldError("email", authStore.error);
-    } else if (authStore.error.toLowerCase().includes("password")) {
-      setFieldError("password", authStore.error);
+    const errorMsg = (authStore.error as string).toLowerCase();
+    if (errorMsg.includes("account")) {
+      setFieldError("email", authStore.error as string);
+    } else if (errorMsg.includes("password")) {
+      setFieldError("password", authStore.error as string);
     }
   }
 });

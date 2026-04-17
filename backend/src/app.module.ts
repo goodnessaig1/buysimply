@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { LoansModule } from './loans/loans.module';
 import { SeedService } from './db/seed.service';
+import { KeepAliveService } from './common/keep-alive.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { SeedService } from './db/seed.service';
     LoansModule,
   ],
   controllers: [AppController],
-  providers: [AppService, SeedService],
+  providers: [AppService, SeedService, KeepAliveService],
 })
 export class AppModule {}
